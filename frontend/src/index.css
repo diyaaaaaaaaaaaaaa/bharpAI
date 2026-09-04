@@ -17,6 +17,7 @@
   --accent-escalated: #d9a544;
   --accent-unresolved: #c9634f;
   --accent-baseline: #5c6472;
+  --accent-approval: #6f8fd1;
 
   --font-display: "IBM Plex Mono", ui-monospace, monospace;
   --font-body: "IBM Plex Sans", system-ui, sans-serif;
@@ -412,6 +413,60 @@ body {
 
 .guardrail-row .reason {
   color: var(--text-muted);
+}
+
+.approval-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.approval-row:last-child {
+  border-bottom: none;
+}
+
+.approval-row .id {
+  font-family: var(--font-display);
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.approval-row .cause {
+  font-family: var(--font-display);
+  color: var(--accent-approval);
+  flex-shrink: 0;
+}
+
+.approval-row .reason {
+  color: var(--text-muted);
+}
+
+.approval-badge {
+  margin-left: 8px;
+  border-color: var(--accent-approval);
+  color: var(--accent-approval);
+}
+
+.history-step.needs-approval {
+  border-left-color: var(--accent-approval);
+}
+
+.history-step.needs-approval::before {
+  background: var(--accent-approval);
+}
+
+.approval-tag {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 10px;
+  color: var(--accent-approval);
+  border: 1px solid var(--accent-approval);
+  padding: 1px 5px;
+  margin-left: 8px;
+  vertical-align: middle;
 }
 
 /* ---- States ------------------------------------------------------ */

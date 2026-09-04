@@ -4,6 +4,19 @@ export interface HistoryEntry {
   action: string;
   result: Record<string, unknown>;
   blocked?: boolean;
+  requires_approval?: boolean;
+}
+
+export interface GuardrailBlock {
+  action: string;
+  input: Record<string, unknown>;
+  reason: string;
+}
+
+export interface ApprovalFlag {
+  action: string;
+  input: Record<string, unknown>;
+  amount: number;
 }
 
 export interface Case {
@@ -14,7 +27,10 @@ export interface Case {
   status: CaseStatus;
   attempts_made: number;
   messages_sent: number;
-  guardrail_blocks: number;
+  // NOTE: these are lists (one entry per blocked/flagged action), not
+  // counts -- matches what main.py actually writes to results.json.
+  guardrail_blocks: GuardrailBlock[];
+  approval_flags: ApprovalFlag[];
   history: HistoryEntry[];
 }
 
@@ -27,5 +43,9 @@ export interface Summary {
   amount_at_risk: number;
   amount_recovered: number;
   baseline_avg_resolved: number;
-  guardrail_blocks: number;
+  guardrail_activations: number;
+  cases_with_a_guardrail_block: number;
+  approval_activations: number;
+  cases_requiring_approval: number;
+  approval_threshold_amount: number;
 }

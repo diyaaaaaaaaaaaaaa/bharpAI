@@ -18,6 +18,7 @@ from google import genai
 from models import Transaction, RecoveryCase
 from agent import run_case
 from run_baseline import naive_retry_baseline
+from policy_engine import APPROVAL_THRESHOLD_AMOUNT
 
 load_dotenv()
 
@@ -66,6 +67,14 @@ def main():
     guardrail_activations = sum(len(c.guardrail_blocks) for c in results)
     cases_with_a_block = sum(1 for c in results if c.guardrail_blocks)
 
+    # Approval-tiering activations -- every money-moving action flagged
+    # because the transaction amount exceeded the policy threshold (see
+    # policy_engine.APPROVAL_THRESHOLD_AMOUNT). Same pattern as the
+    # guardrail count above, kept as its own metric since it's a
+    # separate axis (allowed-but-flagged, not blocked).
+    approval_activations = sum(len(c.approval_flags) for c in results)
+    cases_requiring_approval = sum(1 for c in results if c.approval_flags)
+
     print("\n\n=== BATCH SUMMARY ===")
     print(f"Total cases:      {total}")
     print(f"Resolved:         {resolved} ({resolved/total:.0%})")
@@ -74,6 +83,7 @@ def main():
     if errored:
         print(f"API errors:       {errored} ({errored/total:.0%}) -- these never got a real answer, investigate")
     print(f"Guardrail blocks: {guardrail_activations} (across {cases_with_a_block} case(s))")
+    print(f"Approval flags:   {approval_activations} (across {cases_requiring_approval} case(s), amount > ₹{APPROVAL_THRESHOLD_AMOUNT:,})")
 
     # Baseline comparison, computed on the exact same batch, averaged
     # over several runs since it's a random simulation.
@@ -105,6 +115,9 @@ def main():
             "baseline_avg_resolved": baseline_avg,
             "guardrail_activations": guardrail_activations,
             "cases_with_a_guardrail_block": cases_with_a_block,
+            "approval_activations": approval_activations,
+            "cases_requiring_approval": cases_requiring_approval,
+            "approval_threshold_amount": APPROVAL_THRESHOLD_AMOUNT,
         },
         "cases": [
             {
@@ -117,6 +130,7 @@ def main():
                 "messages_sent": r.messages_sent,
                 "history": r.history,
                 "guardrail_blocks": r.guardrail_blocks,
+                "approval_flags": r.approval_flags,
             }
             for r in results
         ],

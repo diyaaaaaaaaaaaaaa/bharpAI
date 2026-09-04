@@ -5,7 +5,6 @@ be able to print(case) and read it while you're learning how the
 agent behaves, before you add any real persistence.
 """
 from dataclasses import dataclass, field
-from pydantic import Field
 
 
 @dataclass
