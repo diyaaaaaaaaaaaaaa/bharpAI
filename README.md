@@ -4,7 +4,7 @@
 
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688) ![React](https://img.shields.io/badge/React-18-61DAFB) ![TypeScript](https://img.shields.io/badge/TypeScript-5.6+-3178C6) ![Gemini](https://img.shields.io/badge/Google_Gemini-API-4285F4) ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-> **Disclaimer:** RecoverAI is a prototype built for the Razorpay Buildathon. It runs entirely on synthetic transaction and checkout-session data through simulated recovery actions. It does not process real payments, send real messages, or connect to any production payment gateway.
+> **Disclaimer:** BharpAI is a prototype built for the Razorpay Buildathon. It runs entirely on synthetic transaction and checkout-session data through simulated recovery actions. It does not process real payments, send real messages, or connect to any production payment gateway.
 
 Built solo by Prachi Choudhary, B.Tech ECE, IIIT Naya Raipur.
 
