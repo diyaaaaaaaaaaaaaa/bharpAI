@@ -14,7 +14,7 @@ Built solo by Prachi Choudhary, B.Tech ECE, IIIT Naya Raipur.
 
 Failed payments and abandoned checkouts are two of the most common and most sloppily handled sources of revenue leakage for online businesses. Most systems either retry every failure identically regardless of cause, or push everything to manual review. Neither is precise, and both scale badly.
 
-**BharpAI** is an agent that diagnoses *why* a payment failed or a checkout was abandoned, and takes exactly one bounded, policy-gated action to try to recover it, either retry, offer an alternate method, send a reminder, escalate, or honestly give up. It runs the same underlying engine across **two working trigger sources** (payment failure recovery and checkout drop-off), proving the architecture generalizes with working code, not a slide. Every money-adjacent decision passes through a deterministic policy layer including an amount-based approval tier modeled on the idea that an AI agent shouldn't have blanket authority over real money and that policy layer is proven correct by **19 passing unit tests**, independent of the LLM. On the payment-recovery batch, BharpAI resolves **60%** of cases versus a naive "always retry once" baseline's **46%**, on the identical dataset.
+**BharpAI** is an agent that diagnoses *why* a payment failed or a checkout was abandoned, and takes exactly one bounded, policy-gated action to try to recover it, either retry, offer an alternate method, send a reminder, escalate, or honestly give up. It runs the same underlying engine across **two working trigger sources** (payment failure recovery and checkout drop-off), proving the architecture generalizes with working code, not a slide. Every money-adjacent decision passes through a deterministic policy layer including an amount-based approval tier modeled on the idea that an AI agent shouldn't have blanket authority over real money and that policy layer is proven correct by **19 passing unit tests**, independent of the LLM. On the payment-recovery batch, BharpAI resolves **60%** of cases versus a naive "always retry once" baseline's **29%**, on the identical dataset.
 
 ---
 
@@ -196,7 +196,7 @@ Covers: retry/reminder caps at and below the limit, no-repeat-contact rules, esc
 | Approval flags | 20 actions across 19 cases (amount > ₹5,000) |
 | ₹ at risk | ₹2,66,150.86 |
 | ₹ recovered | ₹1,61,185.17 (61%) |
-| **Naive retry-only baseline** | **31.9/70 (46%)** |
+| **Naive retry-only baseline** | **20.3/70 (29%)** |
 | **RecoverAI vs. baseline** | **+14 points** |
 
 **Leakage by root cause:**
