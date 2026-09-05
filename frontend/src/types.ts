@@ -34,6 +34,15 @@ export interface Case {
   history: HistoryEntry[];
 }
 
+export interface LeakageCategory {
+  category: string;
+  total: number;
+  resolved: number;
+  recovery_rate: number;
+  amount_at_risk: number;
+  amount_recovered: number;
+}
+
 export interface Summary {
   total: number;
   resolved: number;
@@ -48,4 +57,5 @@ export interface Summary {
   approval_activations: number;
   cases_requiring_approval: number;
   approval_threshold_amount: number;
+  leakage_breakdown: LeakageCategory[];
 }

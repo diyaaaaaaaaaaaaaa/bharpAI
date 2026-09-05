@@ -10,6 +10,7 @@ Run it with:  python main.py
 """
 import json
 import os
+from collections import defaultdict
 from dataclasses import asdict
 
 from dotenv import load_dotenv
@@ -19,8 +20,21 @@ from models import Transaction, RecoveryCase
 from agent import run_case
 from run_baseline import naive_retry_baseline
 from policy_engine import APPROVAL_THRESHOLD_AMOUNT
+from generate_dataset import CAUSES
 
 load_dotenv()
+
+# The clean, named root causes generate_dataset.py actually draws from
+# (excluding "ambiguous_error", which isn't a real gateway_response
+# value -- it's the label for the deliberately-messy raw strings). Any
+# gateway_response that isn't one of these known causes gets bucketed
+# as "ambiguous_error" for reporting, same normalization
+# generate_dataset.py's own sanity-check counter already does.
+_KNOWN_CAUSES = {c for c, _ in CAUSES if c != "ambiguous_error"}
+
+
+def _leakage_category(gateway_response: str) -> str:
+    return gateway_response if gateway_response in _KNOWN_CAUSES else "ambiguous_error"
 
 
 def main():
@@ -101,6 +115,40 @@ def main():
     print(f"\n₹ at risk:     {at_risk_amount:,.2f}")
     print(f"₹ recovered:   {recovered_amount:,.2f} ({recovered_amount/at_risk_amount:.0%})")
 
+    # Revenue leakage category breakdown -- same data you already have
+    # per case, just grouped by root cause instead of left flat. Lets
+    # the dashboard/pitch show *where* the money at risk actually
+    # concentrates, not just the aggregate total.
+    breakdown = defaultdict(lambda: {"total": 0, "resolved": 0, "amount_at_risk": 0.0, "amount_recovered": 0.0})
+    for r in results:
+        cat = _leakage_category(r.transaction.gateway_response)
+        b = breakdown[cat]
+        b["total"] += 1
+        b["amount_at_risk"] += r.transaction.amount
+        if r.status == "resolved":
+            b["resolved"] += 1
+            b["amount_recovered"] += r.transaction.amount
+
+    leakage_breakdown = [
+        {
+            "category": cat,
+            "total": vals["total"],
+            "resolved": vals["resolved"],
+            "recovery_rate": (vals["resolved"] / vals["total"]) if vals["total"] else 0.0,
+            "amount_at_risk": round(vals["amount_at_risk"], 2),
+            "amount_recovered": round(vals["amount_recovered"], 2),
+        }
+        for cat, vals in sorted(breakdown.items(), key=lambda kv: -kv[1]["amount_at_risk"])
+    ]
+
+    print("\nLeakage category breakdown:")
+    for row in leakage_breakdown:
+        print(
+            f"  {row['category']:<20} {row['total']:>3} cases  "
+            f"{row['resolved']:>3} resolved ({row['recovery_rate']:.0%})  "
+            f"₹{row['amount_at_risk']:,.0f} at risk"
+        )
+
     # Write structured results for the dashboard/API to read -- this
     # is what api.py serves, so the demo never needs to re-call the LLM.
     output = {
@@ -118,6 +166,7 @@ def main():
             "approval_activations": approval_activations,
             "cases_requiring_approval": cases_requiring_approval,
             "approval_threshold_amount": APPROVAL_THRESHOLD_AMOUNT,
+            "leakage_breakdown": leakage_breakdown,
         },
         "cases": [
             {

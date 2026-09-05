@@ -1,18 +1,60 @@
 {
   "summary": {
     "total": 70,
-    "resolved": 38,
-    "escalated": 13,
-    "unresolved": 17,
-    "errored": 2,
+    "resolved": 42,
+    "escalated": 9,
+    "unresolved": 19,
+    "errored": 0,
     "amount_at_risk": 266150.86,
-    "amount_recovered": 140993.26,
-    "baseline_avg_resolved": 31.35,
+    "amount_recovered": 161185.17,
+    "baseline_avg_resolved": 31.95,
     "guardrail_activations": 0,
     "cases_with_a_guardrail_block": 0,
-    "approval_activations": 23,
-    "cases_requiring_approval": 20,
-    "approval_threshold_amount": 5000
+    "approval_activations": 20,
+    "cases_requiring_approval": 19,
+    "approval_threshold_amount": 5000,
+    "leakage_breakdown": [
+      {
+        "category": "insufficient_funds",
+        "total": 18,
+        "resolved": 5,
+        "recovery_rate": 0.2777777777777778,
+        "amount_at_risk": 75516.54,
+        "amount_recovered": 23696.06
+      },
+      {
+        "category": "network_timeout",
+        "total": 20,
+        "resolved": 15,
+        "recovery_rate": 0.75,
+        "amount_at_risk": 56202.04,
+        "amount_recovered": 45112.12
+      },
+      {
+        "category": "bank_server_error",
+        "total": 13,
+        "resolved": 13,
+        "recovery_rate": 1.0,
+        "amount_at_risk": 51134.61,
+        "amount_recovered": 51134.61
+      },
+      {
+        "category": "card_declined",
+        "total": 11,
+        "resolved": 6,
+        "recovery_rate": 0.5454545454545454,
+        "amount_at_risk": 46950.25,
+        "amount_recovered": 29767.22
+      },
+      {
+        "category": "ambiguous_error",
+        "total": 8,
+        "resolved": 3,
+        "recovery_rate": 0.375,
+        "amount_at_risk": 36347.42,
+        "amount_recovered": 11475.16
+      }
+    ]
   },
   "cases": [
     {
@@ -20,19 +62,32 @@
       "customer_id": "CUST6529",
       "amount": 1855.94,
       "gateway_response": "card_declined",
-      "status": "resolved",
+      "status": "escalated",
       "attempts_made": 0,
-      "messages_sent": 0,
+      "messages_sent": 1,
       "history": [
         {
           "action": "offer_alt_method",
           "result": {
-            "status": "payment_completed",
+            "status": "offered_no_response",
             "methods": [
               "upi",
               "wallet",
               "netbanking"
             ]
+          }
+        },
+        {
+          "action": "send_recovery_message",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        },
+        {
+          "action": "escalate_to_human",
+          "result": {
+            "status": "escalated"
           }
         }
       ],
@@ -44,6 +99,18 @@
       "customer_id": "CUST3435",
       "amount": 2946.6,
       "gateway_response": "insufficient_funds",
+      "status": "unresolved",
+      "attempts_made": 0,
+      "messages_sent": 0,
+      "history": [],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "transaction_id": "TXN0003",
+      "customer_id": "CUST8304",
+      "amount": 4851.52,
+      "gateway_response": "insufficient_funds",
       "status": "resolved",
       "attempts_made": 0,
       "messages_sent": 0,
@@ -64,31 +131,25 @@
       "approval_flags": []
     },
     {
-      "transaction_id": "TXN0003",
-      "customer_id": "CUST8304",
-      "amount": 4851.52,
-      "gateway_response": "insufficient_funds",
-      "status": "unresolved",
-      "attempts_made": 0,
-      "messages_sent": 0,
-      "history": [],
-      "guardrail_blocks": [],
-      "approval_flags": []
-    },
-    {
       "transaction_id": "TXN0004",
       "customer_id": "CUST8752",
       "amount": 3800.93,
       "gateway_response": "AUTH_FAILED_UNKNOWN_REASON",
-      "status": "resolved",
+      "status": "escalated",
       "attempts_made": 1,
       "messages_sent": 0,
       "history": [
         {
           "action": "retry_payment",
           "result": {
-            "status": "succeeded",
-            "delay_minutes": 5
+            "status": "failed",
+            "delay_minutes": 15
+          }
+        },
+        {
+          "action": "escalate_to_human",
+          "result": {
+            "status": "escalated"
           }
         }
       ],
@@ -100,10 +161,22 @@
       "customer_id": "CUST2524",
       "amount": 4853.98,
       "gateway_response": "insufficient_funds",
-      "status": "unresolved",
+      "status": "resolved",
       "attempts_made": 0,
       "messages_sent": 0,
-      "history": [],
+      "history": [
+        {
+          "action": "offer_alt_method",
+          "result": {
+            "status": "payment_completed",
+            "methods": [
+              "upi",
+              "wallet",
+              "netbanking"
+            ]
+          }
+        }
+      ],
       "guardrail_blocks": [],
       "approval_flags": []
     },
@@ -112,14 +185,14 @@
       "customer_id": "CUST8783",
       "amount": 7879.84,
       "gateway_response": "insufficient_funds",
-      "status": "escalated",
+      "status": "resolved",
       "attempts_made": 0,
       "messages_sent": 0,
       "history": [
         {
           "action": "offer_alt_method",
           "result": {
-            "status": "offered_no_response",
+            "status": "payment_completed",
             "methods": [
               "upi",
               "wallet",
@@ -127,12 +200,6 @@
             ]
           },
           "requires_approval": true
-        },
-        {
-          "action": "escalate_to_human",
-          "result": {
-            "status": "escalated"
-          }
         }
       ],
       "guardrail_blocks": [],
@@ -240,20 +307,8 @@
         {
           "action": "retry_payment",
           "result": {
-            "status": "failed",
+            "status": "succeeded",
             "delay_minutes": 5
-          },
-          "requires_approval": true
-        },
-        {
-          "action": "offer_alt_method",
-          "result": {
-            "status": "payment_completed",
-            "methods": [
-              "upi",
-              "wallet",
-              "netbanking"
-            ]
           },
           "requires_approval": true
         }
@@ -264,17 +319,6 @@
           "action": "retry_payment",
           "input": {
             "delay_minutes": 5
-          },
-          "amount": 7570.6
-        },
-        {
-          "action": "offer_alt_method",
-          "input": {
-            "methods": [
-              "upi",
-              "wallet",
-              "netbanking"
-            ]
           },
           "amount": 7570.6
         }
@@ -285,9 +329,9 @@
       "customer_id": "CUST9670",
       "amount": 5820.64,
       "gateway_response": "ERR_502_GW_TIMEOUT_RETRY_LATER",
-      "status": "escalated",
-      "attempts_made": 2,
-      "messages_sent": 0,
+      "status": "resolved",
+      "attempts_made": 1,
+      "messages_sent": 1,
       "history": [
         {
           "action": "retry_payment",
@@ -298,17 +342,10 @@
           "requires_approval": true
         },
         {
-          "action": "retry_payment",
+          "action": "send_recovery_message",
           "result": {
-            "status": "failed",
-            "delay_minutes": 15
-          },
-          "requires_approval": true
-        },
-        {
-          "action": "escalate_to_human",
-          "result": {
-            "status": "escalated"
+            "status": "payment_completed",
+            "channel": "sms"
           }
         }
       ],
@@ -318,13 +355,6 @@
           "action": "retry_payment",
           "input": {
             "delay_minutes": 5
-          },
-          "amount": 5820.64
-        },
-        {
-          "action": "retry_payment",
-          "input": {
-            "delay_minutes": 15
           },
           "amount": 5820.64
         }
@@ -362,22 +392,10 @@
       "customer_id": "CUST2291",
       "amount": 4512.58,
       "gateway_response": "insufficient_funds",
-      "status": "resolved",
+      "status": "unresolved",
       "attempts_made": 0,
       "messages_sent": 0,
-      "history": [
-        {
-          "action": "offer_alt_method",
-          "result": {
-            "status": "payment_completed",
-            "methods": [
-              "upi",
-              "wallet",
-              "netbanking"
-            ]
-          }
-        }
-      ],
+      "history": [],
       "guardrail_blocks": [],
       "approval_flags": []
     },
@@ -406,7 +424,7 @@
       "customer_id": "CUST1980",
       "amount": 2387.84,
       "gateway_response": "card_declined",
-      "status": "escalated",
+      "status": "unresolved",
       "attempts_made": 0,
       "messages_sent": 1,
       "history": [
@@ -429,9 +447,9 @@
           }
         },
         {
-          "action": "escalate_to_human",
+          "action": "mark_unresolved",
           "result": {
-            "status": "escalated"
+            "status": "closed_unresolved"
           }
         }
       ],
@@ -464,21 +482,14 @@
       "amount": 2177.55,
       "gateway_response": "network_timeout",
       "status": "resolved",
-      "attempts_made": 2,
+      "attempts_made": 1,
       "messages_sent": 0,
       "history": [
         {
           "action": "retry_payment",
           "result": {
-            "status": "failed",
-            "delay_minutes": 5
-          }
-        },
-        {
-          "action": "retry_payment",
-          "result": {
             "status": "succeeded",
-            "delay_minutes": 15
+            "delay_minutes": 5
           }
         }
       ],
@@ -490,14 +501,14 @@
       "customer_id": "CUST6641",
       "amount": 1336.68,
       "gateway_response": "network_timeout",
-      "status": "unresolved",
+      "status": "resolved",
       "attempts_made": 1,
       "messages_sent": 0,
       "history": [
         {
           "action": "retry_payment",
           "result": {
-            "status": "failed",
+            "status": "succeeded",
             "delay_minutes": 5
           }
         }
@@ -530,15 +541,28 @@
       "customer_id": "CUST4629",
       "amount": 771.2,
       "gateway_response": "network_timeout",
-      "status": "resolved",
+      "status": "escalated",
       "attempts_made": 1,
-      "messages_sent": 0,
+      "messages_sent": 1,
       "history": [
         {
           "action": "retry_payment",
           "result": {
-            "status": "succeeded",
+            "status": "failed",
             "delay_minutes": 5
+          }
+        },
+        {
+          "action": "send_recovery_message",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        },
+        {
+          "action": "escalate_to_human",
+          "result": {
+            "status": "escalated"
           }
         }
       ],
@@ -550,15 +574,28 @@
       "customer_id": "CUST5179",
       "amount": 2489.76,
       "gateway_response": "network_timeout",
-      "status": "resolved",
-      "attempts_made": 1,
+      "status": "escalated",
+      "attempts_made": 2,
       "messages_sent": 0,
       "history": [
         {
           "action": "retry_payment",
           "result": {
-            "status": "succeeded",
+            "status": "failed",
             "delay_minutes": 5
+          }
+        },
+        {
+          "action": "retry_payment",
+          "result": {
+            "status": "failed",
+            "delay_minutes": 15
+          }
+        },
+        {
+          "action": "escalate_to_human",
+          "result": {
+            "status": "escalated"
           }
         }
       ],
@@ -639,7 +676,7 @@
       "customer_id": "CUST5894",
       "amount": 1609.87,
       "gateway_response": "network_timeout",
-      "status": "error",
+      "status": "unresolved",
       "attempts_made": 0,
       "messages_sent": 0,
       "history": [],
@@ -651,14 +688,14 @@
       "customer_id": "CUST5138",
       "amount": 5137.66,
       "gateway_response": "insufficient_funds",
-      "status": "resolved",
+      "status": "unresolved",
       "attempts_made": 0,
       "messages_sent": 0,
       "history": [
         {
           "action": "offer_alt_method",
           "result": {
-            "status": "payment_completed",
+            "status": "offered_no_response",
             "methods": [
               "upi",
               "wallet",
@@ -712,19 +749,32 @@
       "customer_id": "CUST5589",
       "amount": 3947.27,
       "gateway_response": "insufficient_funds",
-      "status": "resolved",
+      "status": "unresolved",
       "attempts_made": 0,
-      "messages_sent": 0,
+      "messages_sent": 1,
       "history": [
         {
           "action": "offer_alt_method",
           "result": {
-            "status": "payment_completed",
+            "status": "offered_no_response",
             "methods": [
               "upi",
               "wallet",
               "netbanking"
             ]
+          }
+        },
+        {
+          "action": "send_recovery_message",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "whatsapp"
+          }
+        },
+        {
+          "action": "mark_unresolved",
+          "result": {
+            "status": "closed_unresolved"
           }
         }
       ],
@@ -736,9 +786,9 @@
       "customer_id": "CUST3755",
       "amount": 1984.65,
       "gateway_response": "insufficient_funds",
-      "status": "unresolved",
+      "status": "escalated",
       "attempts_made": 0,
-      "messages_sent": 0,
+      "messages_sent": 1,
       "history": [
         {
           "action": "offer_alt_method",
@@ -749,6 +799,19 @@
               "wallet",
               "netbanking"
             ]
+          }
+        },
+        {
+          "action": "send_recovery_message",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        },
+        {
+          "action": "escalate_to_human",
+          "result": {
+            "status": "escalated"
           }
         }
       ],
@@ -780,32 +843,15 @@
       "customer_id": "CUST3309",
       "amount": 489.05,
       "gateway_response": "ISSUER_RESPONSE_CODE_UNRECOGNIZED",
-      "status": "escalated",
+      "status": "resolved",
       "attempts_made": 1,
       "messages_sent": 0,
       "history": [
         {
           "action": "retry_payment",
           "result": {
-            "status": "failed",
+            "status": "succeeded",
             "delay_minutes": 5
-          }
-        },
-        {
-          "action": "offer_alt_method",
-          "result": {
-            "status": "offered_no_response",
-            "methods": [
-              "upi",
-              "wallet",
-              "netbanking"
-            ]
-          }
-        },
-        {
-          "action": "escalate_to_human",
-          "result": {
-            "status": "escalated"
           }
         }
       ],
@@ -817,7 +863,7 @@
       "customer_id": "CUST6824",
       "amount": 4064.61,
       "gateway_response": "network_timeout",
-      "status": "resolved",
+      "status": "unresolved",
       "attempts_made": 1,
       "messages_sent": 0,
       "history": [
@@ -827,7 +873,40 @@
             "status": "failed",
             "delay_minutes": 5
           }
-        },
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "transaction_id": "TXN0033",
+      "customer_id": "CUST1999",
+      "amount": 4376.93,
+      "gateway_response": "bank_server_error",
+      "status": "resolved",
+      "attempts_made": 1,
+      "messages_sent": 0,
+      "history": [
+        {
+          "action": "retry_payment",
+          "result": {
+            "status": "succeeded",
+            "delay_minutes": 5
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "transaction_id": "TXN0034",
+      "customer_id": "CUST5478",
+      "amount": 3676.65,
+      "gateway_response": "card_declined",
+      "status": "resolved",
+      "attempts_made": 0,
+      "messages_sent": 0,
+      "history": [
         {
           "action": "offer_alt_method",
           "result": {
@@ -844,11 +923,11 @@
       "approval_flags": []
     },
     {
-      "transaction_id": "TXN0033",
-      "customer_id": "CUST1999",
-      "amount": 4376.93,
-      "gateway_response": "bank_server_error",
-      "status": "escalated",
+      "transaction_id": "TXN0035",
+      "customer_id": "CUST5670",
+      "amount": 3555.0,
+      "gateway_response": "network_timeout",
+      "status": "resolved",
       "attempts_made": 2,
       "messages_sent": 0,
       "history": [
@@ -862,14 +941,8 @@
         {
           "action": "retry_payment",
           "result": {
-            "status": "failed",
-            "delay_minutes": 15
-          }
-        },
-        {
-          "action": "escalate_to_human",
-          "result": {
-            "status": "escalated"
+            "status": "succeeded",
+            "delay_minutes": 10
           }
         }
       ],
@@ -877,10 +950,37 @@
       "approval_flags": []
     },
     {
-      "transaction_id": "TXN0034",
-      "customer_id": "CUST5478",
-      "amount": 3676.65,
-      "gateway_response": "card_declined",
+      "transaction_id": "TXN0036",
+      "customer_id": "CUST9814",
+      "amount": 4550.98,
+      "gateway_response": "bank_server_error",
+      "status": "resolved",
+      "attempts_made": 2,
+      "messages_sent": 0,
+      "history": [
+        {
+          "action": "retry_payment",
+          "result": {
+            "status": "failed",
+            "delay_minutes": 5
+          }
+        },
+        {
+          "action": "retry_payment",
+          "result": {
+            "status": "succeeded",
+            "delay_minutes": 15
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "transaction_id": "TXN0037",
+      "customer_id": "CUST7657",
+      "amount": 3993.99,
+      "gateway_response": "insufficient_funds",
       "status": "unresolved",
       "attempts_made": 0,
       "messages_sent": 1,
@@ -908,81 +1008,11 @@
       "approval_flags": []
     },
     {
-      "transaction_id": "TXN0035",
-      "customer_id": "CUST5670",
-      "amount": 3555.0,
-      "gateway_response": "network_timeout",
-      "status": "resolved",
-      "attempts_made": 1,
-      "messages_sent": 0,
-      "history": [
-        {
-          "action": "retry_payment",
-          "result": {
-            "status": "succeeded",
-            "delay_minutes": 5
-          }
-        }
-      ],
-      "guardrail_blocks": [],
-      "approval_flags": []
-    },
-    {
-      "transaction_id": "TXN0036",
-      "customer_id": "CUST9814",
-      "amount": 4550.98,
-      "gateway_response": "bank_server_error",
-      "status": "resolved",
-      "attempts_made": 1,
-      "messages_sent": 0,
-      "history": [
-        {
-          "action": "retry_payment",
-          "result": {
-            "status": "succeeded",
-            "delay_minutes": 5
-          }
-        }
-      ],
-      "guardrail_blocks": [],
-      "approval_flags": []
-    },
-    {
-      "transaction_id": "TXN0037",
-      "customer_id": "CUST7657",
-      "amount": 3993.99,
-      "gateway_response": "insufficient_funds",
-      "status": "unresolved",
-      "attempts_made": 0,
-      "messages_sent": 0,
-      "history": [
-        {
-          "action": "offer_alt_method",
-          "result": {
-            "status": "offered_no_response",
-            "methods": [
-              "upi",
-              "wallet",
-              "netbanking"
-            ]
-          }
-        },
-        {
-          "action": "mark_unresolved",
-          "result": {
-            "status": "closed_unresolved"
-          }
-        }
-      ],
-      "guardrail_blocks": [],
-      "approval_flags": []
-    },
-    {
       "transaction_id": "TXN0038",
       "customer_id": "CUST9397",
       "amount": 7266.52,
       "gateway_response": "card_declined",
-      "status": "escalated",
+      "status": "unresolved",
       "attempts_made": 0,
       "messages_sent": 0,
       "history": [
@@ -997,12 +1027,6 @@
             ]
           },
           "requires_approval": true
-        },
-        {
-          "action": "escalate_to_human",
-          "result": {
-            "status": "escalated"
-          }
         }
       ],
       "guardrail_blocks": [],
@@ -1045,37 +1069,12 @@
       "customer_id": "CUST4860",
       "amount": 6319.97,
       "gateway_response": "insufficient_funds",
-      "status": "resolved",
+      "status": "unresolved",
       "attempts_made": 0,
       "messages_sent": 0,
-      "history": [
-        {
-          "action": "offer_alt_method",
-          "result": {
-            "status": "payment_completed",
-            "methods": [
-              "upi",
-              "wallet",
-              "netbanking"
-            ]
-          },
-          "requires_approval": true
-        }
-      ],
+      "history": [],
       "guardrail_blocks": [],
-      "approval_flags": [
-        {
-          "action": "offer_alt_method",
-          "input": {
-            "methods": [
-              "upi",
-              "wallet",
-              "netbanking"
-            ]
-          },
-          "amount": 6319.97
-        }
-      ]
+      "approval_flags": []
     },
     {
       "transaction_id": "TXN0041",
@@ -1119,9 +1118,9 @@
       "customer_id": "CUST2119",
       "amount": 5958.57,
       "gateway_response": "insufficient_funds",
-      "status": "unresolved",
+      "status": "escalated",
       "attempts_made": 0,
-      "messages_sent": 0,
+      "messages_sent": 1,
       "history": [
         {
           "action": "offer_alt_method",
@@ -1134,6 +1133,19 @@
             ]
           },
           "requires_approval": true
+        },
+        {
+          "action": "send_recovery_message",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "whatsapp"
+          }
+        },
+        {
+          "action": "escalate_to_human",
+          "result": {
+            "status": "escalated"
+          }
         }
       ],
       "guardrail_blocks": [],
@@ -1176,18 +1188,10 @@
       "customer_id": "CUST4803",
       "amount": 2154.48,
       "gateway_response": "network_timeout",
-      "status": "resolved",
-      "attempts_made": 1,
+      "status": "unresolved",
+      "attempts_made": 0,
       "messages_sent": 0,
-      "history": [
-        {
-          "action": "retry_payment",
-          "result": {
-            "status": "succeeded",
-            "delay_minutes": 5
-          }
-        }
-      ],
+      "history": [],
       "guardrail_blocks": [],
       "approval_flags": []
     },
@@ -1197,14 +1201,22 @@
       "amount": 7742.62,
       "gateway_response": "bank_server_error",
       "status": "resolved",
-      "attempts_made": 1,
+      "attempts_made": 2,
       "messages_sent": 0,
       "history": [
         {
           "action": "retry_payment",
           "result": {
-            "status": "succeeded",
+            "status": "failed",
             "delay_minutes": 5
+          },
+          "requires_approval": true
+        },
+        {
+          "action": "retry_payment",
+          "result": {
+            "status": "succeeded",
+            "delay_minutes": 10
           },
           "requires_approval": true
         }
@@ -1217,6 +1229,13 @@
             "delay_minutes": 5
           },
           "amount": 7742.62
+        },
+        {
+          "action": "retry_payment",
+          "input": {
+            "delay_minutes": 10
+          },
+          "amount": 7742.62
         }
       ]
     },
@@ -1225,27 +1244,21 @@
       "customer_id": "CUST1820",
       "amount": 7006.61,
       "gateway_response": "card_declined",
-      "status": "escalated",
+      "status": "resolved",
       "attempts_made": 0,
       "messages_sent": 0,
       "history": [
         {
           "action": "offer_alt_method",
           "result": {
-            "status": "offered_no_response",
+            "status": "payment_completed",
             "methods": [
               "upi",
-              "netbanking",
-              "wallet"
+              "wallet",
+              "netbanking"
             ]
           },
           "requires_approval": true
-        },
-        {
-          "action": "escalate_to_human",
-          "result": {
-            "status": "escalated"
-          }
         }
       ],
       "guardrail_blocks": [],
@@ -1255,8 +1268,8 @@
           "input": {
             "methods": [
               "upi",
-              "netbanking",
-              "wallet"
+              "wallet",
+              "netbanking"
             ]
           },
           "amount": 7006.61
@@ -1268,22 +1281,10 @@
       "customer_id": "CUST7308",
       "amount": 2836.27,
       "gateway_response": "insufficient_funds",
-      "status": "resolved",
+      "status": "unresolved",
       "attempts_made": 0,
       "messages_sent": 0,
-      "history": [
-        {
-          "action": "offer_alt_method",
-          "result": {
-            "status": "payment_completed",
-            "methods": [
-              "upi",
-              "wallet",
-              "netbanking"
-            ]
-          }
-        }
-      ],
+      "history": [],
       "guardrail_blocks": [],
       "approval_flags": []
     },
@@ -1294,7 +1295,7 @@
       "gateway_response": "insufficient_funds",
       "status": "unresolved",
       "attempts_made": 0,
-      "messages_sent": 0,
+      "messages_sent": 1,
       "history": [
         {
           "action": "offer_alt_method",
@@ -1306,6 +1307,19 @@
               "netbanking"
             ]
           }
+        },
+        {
+          "action": "send_recovery_message",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "whatsapp"
+          }
+        },
+        {
+          "action": "mark_unresolved",
+          "result": {
+            "status": "closed_unresolved"
+          }
         }
       ],
       "guardrail_blocks": [],
@@ -1316,10 +1330,18 @@
       "customer_id": "CUST5287",
       "amount": 889.67,
       "gateway_response": "network_timeout",
-      "status": "unresolved",
-      "attempts_made": 0,
+      "status": "resolved",
+      "attempts_made": 1,
       "messages_sent": 0,
-      "history": [],
+      "history": [
+        {
+          "action": "retry_payment",
+          "result": {
+            "status": "succeeded",
+            "delay_minutes": 5
+          }
+        }
+      ],
       "guardrail_blocks": [],
       "approval_flags": []
     },
@@ -1328,28 +1350,15 @@
       "customer_id": "CUST6497",
       "amount": 2592.12,
       "gateway_response": "bank_server_error",
-      "status": "escalated",
+      "status": "resolved",
       "attempts_made": 1,
-      "messages_sent": 1,
+      "messages_sent": 0,
       "history": [
         {
           "action": "retry_payment",
           "result": {
-            "status": "failed",
+            "status": "succeeded",
             "delay_minutes": 5
-          }
-        },
-        {
-          "action": "send_recovery_message",
-          "result": {
-            "status": "sent_no_response",
-            "channel": "sms"
-          }
-        },
-        {
-          "action": "escalate_to_human",
-          "result": {
-            "status": "escalated"
           }
         }
       ],
@@ -1361,14 +1370,14 @@
       "customer_id": "CUST1438",
       "amount": 6657.55,
       "gateway_response": "insufficient_funds",
-      "status": "resolved",
+      "status": "unresolved",
       "attempts_made": 0,
       "messages_sent": 0,
       "history": [
         {
           "action": "offer_alt_method",
           "result": {
-            "status": "payment_completed",
+            "status": "offered_no_response",
             "methods": [
               "upi",
               "wallet",
@@ -1445,26 +1454,19 @@
       "customer_id": "CUST8767",
       "amount": 2776.27,
       "gateway_response": "card_declined",
-      "status": "unresolved",
+      "status": "resolved",
       "attempts_made": 0,
-      "messages_sent": 1,
+      "messages_sent": 0,
       "history": [
         {
           "action": "offer_alt_method",
           "result": {
-            "status": "offered_no_response",
+            "status": "payment_completed",
             "methods": [
               "upi",
               "wallet",
               "netbanking"
             ]
-          }
-        },
-        {
-          "action": "send_recovery_message",
-          "result": {
-            "status": "sent_no_response",
-            "channel": "whatsapp"
           }
         }
       ],
@@ -1491,6 +1493,12 @@
             ]
           },
           "requires_approval": true
+        },
+        {
+          "action": "mark_unresolved",
+          "result": {
+            "status": "closed_unresolved"
+          }
         }
       ],
       "guardrail_blocks": [],
@@ -1513,8 +1521,8 @@
       "customer_id": "CUST1629",
       "amount": 2928.16,
       "gateway_response": "bank_server_error",
-      "status": "escalated",
-      "attempts_made": 1,
+      "status": "resolved",
+      "attempts_made": 2,
       "messages_sent": 0,
       "history": [
         {
@@ -1525,9 +1533,10 @@
           }
         },
         {
-          "action": "escalate_to_human",
+          "action": "retry_payment",
           "result": {
-            "status": "escalated"
+            "status": "succeeded",
+            "delay_minutes": 15
           }
         }
       ],
@@ -1542,25 +1551,7 @@
       "status": "unresolved",
       "attempts_made": 0,
       "messages_sent": 0,
-      "history": [
-        {
-          "action": "offer_alt_method",
-          "result": {
-            "status": "offered_no_response",
-            "methods": [
-              "upi",
-              "wallet",
-              "netbanking"
-            ]
-          }
-        },
-        {
-          "action": "mark_unresolved",
-          "result": {
-            "status": "closed_unresolved"
-          }
-        }
-      ],
+      "history": [],
       "guardrail_blocks": [],
       "approval_flags": []
     },
@@ -1569,9 +1560,9 @@
       "customer_id": "CUST9240",
       "amount": 4154.71,
       "gateway_response": "PSP_DECLINE_CODE_51",
-      "status": "escalated",
+      "status": "unresolved",
       "attempts_made": 0,
-      "messages_sent": 1,
+      "messages_sent": 0,
       "history": [
         {
           "action": "offer_alt_method",
@@ -1583,12 +1574,130 @@
               "netbanking"
             ]
           }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "transaction_id": "TXN0059",
+      "customer_id": "CUST4414",
+      "amount": 5165.47,
+      "gateway_response": "ISSUER_RESPONSE_CODE_UNRECOGNIZED",
+      "status": "resolved",
+      "attempts_made": 1,
+      "messages_sent": 1,
+      "history": [
+        {
+          "action": "retry_payment",
+          "result": {
+            "status": "failed",
+            "delay_minutes": 5
+          },
+          "requires_approval": true
         },
         {
           "action": "send_recovery_message",
           "result": {
-            "status": "sent_no_response",
-            "channel": "whatsapp"
+            "status": "payment_completed",
+            "channel": "sms"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": [
+        {
+          "action": "retry_payment",
+          "input": {
+            "delay_minutes": 5
+          },
+          "amount": 5165.47
+        }
+      ]
+    },
+    {
+      "transaction_id": "TXN0060",
+      "customer_id": "CUST5661",
+      "amount": 6936.06,
+      "gateway_response": "ERR_502_GW_TIMEOUT_RETRY_LATER",
+      "status": "escalated",
+      "attempts_made": 1,
+      "messages_sent": 0,
+      "history": [
+        {
+          "action": "retry_payment",
+          "result": {
+            "status": "failed",
+            "delay_minutes": 15
+          },
+          "requires_approval": true
+        },
+        {
+          "action": "escalate_to_human",
+          "result": {
+            "status": "escalated"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": [
+        {
+          "action": "retry_payment",
+          "input": {
+            "delay_minutes": 15
+          },
+          "amount": 6936.06
+        }
+      ]
+    },
+    {
+      "transaction_id": "TXN0061",
+      "customer_id": "CUST9551",
+      "amount": 3793.13,
+      "gateway_response": "bank_server_error",
+      "status": "resolved",
+      "attempts_made": 2,
+      "messages_sent": 0,
+      "history": [
+        {
+          "action": "retry_payment",
+          "result": {
+            "status": "failed",
+            "delay_minutes": 15
+          }
+        },
+        {
+          "action": "retry_payment",
+          "result": {
+            "status": "succeeded",
+            "delay_minutes": 30
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "transaction_id": "TXN0062",
+      "customer_id": "CUST4525",
+      "amount": 2162.41,
+      "gateway_response": "GATEWAY_5XX_INTERMITTENT",
+      "status": "escalated",
+      "attempts_made": 2,
+      "messages_sent": 0,
+      "history": [
+        {
+          "action": "retry_payment",
+          "result": {
+            "status": "failed",
+            "delay_minutes": 5
+          }
+        },
+        {
+          "action": "retry_payment",
+          "result": {
+            "status": "failed",
+            "delay_minutes": 15
           }
         },
         {
@@ -1602,127 +1711,26 @@
       "approval_flags": []
     },
     {
-      "transaction_id": "TXN0059",
-      "customer_id": "CUST4414",
-      "amount": 5165.47,
-      "gateway_response": "ISSUER_RESPONSE_CODE_UNRECOGNIZED",
-      "status": "unresolved",
-      "attempts_made": 1,
-      "messages_sent": 0,
-      "history": [
-        {
-          "action": "retry_payment",
-          "result": {
-            "status": "failed",
-            "delay_minutes": 5
-          },
-          "requires_approval": true
-        },
-        {
-          "action": "offer_alt_method",
-          "result": {
-            "status": "offered_no_response",
-            "methods": [
-              "upi",
-              "wallet",
-              "netbanking"
-            ]
-          },
-          "requires_approval": true
-        }
-      ],
-      "guardrail_blocks": [],
-      "approval_flags": [
-        {
-          "action": "retry_payment",
-          "input": {
-            "delay_minutes": 5
-          },
-          "amount": 5165.47
-        },
-        {
-          "action": "offer_alt_method",
-          "input": {
-            "methods": [
-              "upi",
-              "wallet",
-              "netbanking"
-            ]
-          },
-          "amount": 5165.47
-        }
-      ]
-    },
-    {
-      "transaction_id": "TXN0060",
-      "customer_id": "CUST5661",
-      "amount": 6936.06,
-      "gateway_response": "ERR_502_GW_TIMEOUT_RETRY_LATER",
-      "status": "resolved",
-      "attempts_made": 1,
-      "messages_sent": 0,
-      "history": [
-        {
-          "action": "retry_payment",
-          "result": {
-            "status": "succeeded",
-            "delay_minutes": 5
-          },
-          "requires_approval": true
-        }
-      ],
-      "guardrail_blocks": [],
-      "approval_flags": [
-        {
-          "action": "retry_payment",
-          "input": {
-            "delay_minutes": 5
-          },
-          "amount": 6936.06
-        }
-      ]
-    },
-    {
-      "transaction_id": "TXN0061",
-      "customer_id": "CUST9551",
-      "amount": 3793.13,
-      "gateway_response": "bank_server_error",
-      "status": "error",
-      "attempts_made": 0,
-      "messages_sent": 0,
-      "history": [],
-      "guardrail_blocks": [],
-      "approval_flags": []
-    },
-    {
-      "transaction_id": "TXN0062",
-      "customer_id": "CUST4525",
-      "amount": 2162.41,
-      "gateway_response": "GATEWAY_5XX_INTERMITTENT",
-      "status": "resolved",
-      "attempts_made": 1,
-      "messages_sent": 0,
-      "history": [
-        {
-          "action": "retry_payment",
-          "result": {
-            "status": "succeeded",
-            "delay_minutes": 5
-          }
-        }
-      ],
-      "guardrail_blocks": [],
-      "approval_flags": []
-    },
-    {
       "transaction_id": "TXN0063",
       "customer_id": "CUST4687",
       "amount": 2937.06,
       "gateway_response": "card_declined",
-      "status": "unresolved",
+      "status": "resolved",
       "attempts_made": 0,
       "messages_sent": 0,
-      "history": [],
+      "history": [
+        {
+          "action": "offer_alt_method",
+          "result": {
+            "status": "payment_completed",
+            "methods": [
+              "upi",
+              "wallet",
+              "netbanking"
+            ]
+          }
+        }
+      ],
       "guardrail_blocks": [],
       "approval_flags": []
     },
@@ -1754,18 +1762,6 @@
       "status": "unresolved",
       "attempts_made": 0,
       "messages_sent": 0,
-      "history": [],
-      "guardrail_blocks": [],
-      "approval_flags": []
-    },
-    {
-      "transaction_id": "TXN0066",
-      "customer_id": "CUST7180",
-      "amount": 7160.57,
-      "gateway_response": "card_declined",
-      "status": "escalated",
-      "attempts_made": 0,
-      "messages_sent": 0,
       "history": [
         {
           "action": "offer_alt_method",
@@ -1776,14 +1772,32 @@
               "wallet",
               "netbanking"
             ]
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "transaction_id": "TXN0066",
+      "customer_id": "CUST7180",
+      "amount": 7160.57,
+      "gateway_response": "card_declined",
+      "status": "resolved",
+      "attempts_made": 0,
+      "messages_sent": 0,
+      "history": [
+        {
+          "action": "offer_alt_method",
+          "result": {
+            "status": "payment_completed",
+            "methods": [
+              "upi",
+              "wallet",
+              "netbanking"
+            ]
           },
           "requires_approval": true
-        },
-        {
-          "action": "escalate_to_human",
-          "result": {
-            "status": "escalated"
-          }
         }
       ],
       "guardrail_blocks": [],
@@ -1835,14 +1849,14 @@
       "customer_id": "CUST1666",
       "amount": 3618.8,
       "gateway_response": "insufficient_funds",
-      "status": "unresolved",
+      "status": "resolved",
       "attempts_made": 0,
       "messages_sent": 0,
       "history": [
         {
           "action": "offer_alt_method",
           "result": {
-            "status": "offered_no_response",
+            "status": "payment_completed",
             "methods": [
               "upi",
               "wallet",
@@ -1858,39 +1872,6 @@
       "transaction_id": "TXN0069",
       "customer_id": "CUST9730",
       "amount": 4632.05,
-      "gateway_response": "bank_server_error",
-      "status": "escalated",
-      "attempts_made": 2,
-      "messages_sent": 0,
-      "history": [
-        {
-          "action": "retry_payment",
-          "result": {
-            "status": "failed",
-            "delay_minutes": 5
-          }
-        },
-        {
-          "action": "retry_payment",
-          "result": {
-            "status": "failed",
-            "delay_minutes": 15
-          }
-        },
-        {
-          "action": "escalate_to_human",
-          "result": {
-            "status": "escalated"
-          }
-        }
-      ],
-      "guardrail_blocks": [],
-      "approval_flags": []
-    },
-    {
-      "transaction_id": "TXN0070",
-      "customer_id": "CUST1472",
-      "amount": 1173.71,
       "gateway_response": "bank_server_error",
       "status": "resolved",
       "attempts_made": 2,
@@ -1908,6 +1889,26 @@
           "result": {
             "status": "succeeded",
             "delay_minutes": 15
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "transaction_id": "TXN0070",
+      "customer_id": "CUST1472",
+      "amount": 1173.71,
+      "gateway_response": "bank_server_error",
+      "status": "resolved",
+      "attempts_made": 1,
+      "messages_sent": 0,
+      "history": [
+        {
+          "action": "retry_payment",
+          "result": {
+            "status": "succeeded",
+            "delay_minutes": 5
           }
         }
       ],

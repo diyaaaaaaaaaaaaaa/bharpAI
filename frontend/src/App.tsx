@@ -68,6 +68,7 @@ export default function App() {
           <DistributionBar summary={summary} />
           <GuardrailPanel cases={cases} totalBlocks={summary.guardrail_activations} />
           <ApprovalPanel cases={cases} summary={summary} />
+          <LeakagePanel summary={summary} />
           <div className="main">
             <div className="panel">
               <div className="panel-header">
@@ -299,6 +300,46 @@ function ApprovalPanel({ cases, summary }: { cases: Case[]; summary: Summary }) 
           </div>
         ))
       )}
+    </div>
+  );
+}
+
+function LeakagePanel({ summary }: { summary: Summary }) {
+  // Same category-normalization the backend does: gateway_response
+  // values map to their known root cause, or "ambiguous_error" for
+  // the deliberately messy raw strings. For the checkout trigger,
+  // "category" is the drop-off stage instead -- either way, this
+  // panel just renders whatever list of categories the batch's
+  // results.json shipped.
+  const rows = summary.leakage_breakdown ?? [];
+  if (rows.length === 0) return null;
+
+  const maxAtRisk = Math.max(...rows.map((r) => r.amount_at_risk), 1);
+
+  return (
+    <div className="distribution" style={{ marginBottom: 28 }}>
+      <div className="row">
+        <div className="title">Revenue leakage by category</div>
+      </div>
+      {rows.map((row) => (
+        <div className="guardrail-row" key={row.category}>
+          <span className="id" style={{ minWidth: 150 }}>{row.category}</span>
+          <span className="reason" style={{ flex: 1 }}>
+            <div style={{ background: "var(--border)", height: 6, borderRadius: 3, marginBottom: 4 }}>
+              <div
+                style={{
+                  width: `${(row.amount_at_risk / maxAtRisk) * 100}%`,
+                  background: "var(--accent-unresolved)",
+                  height: 6,
+                  borderRadius: 3,
+                }}
+              />
+            </div>
+            {row.total} cases · {row.resolved} resolved ({pct(row.recovery_rate)}) · ₹
+            {formatMoney(row.amount_at_risk)} at risk · ₹{formatMoney(row.amount_recovered)} recovered
+          </span>
+        </div>
+      ))}
     </div>
   );
 }

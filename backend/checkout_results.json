@@ -1,0 +1,1084 @@
+{
+  "trigger": "checkout_dropoff",
+  "summary": {
+    "total": 40,
+    "resolved": 10,
+    "escalated": 6,
+    "unresolved": 24,
+    "errored": 0,
+    "cart_value_at_risk": 125288.73,
+    "cart_value_recovered": 28444.29,
+    "baseline_avg_resolved": 8.75,
+    "guardrail_activations": 0,
+    "approval_activations": 9,
+    "approval_threshold_amount": 300.0,
+    "leakage_breakdown": [
+      {
+        "category": "browsing_cart",
+        "total": 17,
+        "resolved": 0,
+        "recovery_rate": 0.0,
+        "amount_at_risk": 51288.45,
+        "amount_recovered": 0.0
+      },
+      {
+        "category": "shipping_details",
+        "total": 8,
+        "resolved": 3,
+        "recovery_rate": 0.375,
+        "amount_at_risk": 29804.07,
+        "amount_recovered": 9710.38
+      },
+      {
+        "category": "payment_details",
+        "total": 8,
+        "resolved": 4,
+        "recovery_rate": 0.5,
+        "amount_at_risk": 26063.77,
+        "amount_recovered": 14630.3
+      },
+      {
+        "category": "otp_verification",
+        "total": 7,
+        "resolved": 3,
+        "recovery_rate": 0.42857142857142855,
+        "amount_at_risk": 18132.44,
+        "amount_recovered": 4103.61
+      }
+    ]
+  },
+  "cases": [
+    {
+      "session_id": "CART0001",
+      "customer_id": "CUST4448",
+      "cart_value": 375.69,
+      "drop_off_stage": "otp_verification",
+      "session_signal": "otp_verification",
+      "status": "resolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "checkout_completed",
+            "channel": "sms"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0002",
+      "customer_id": "CUST9519",
+      "cart_value": 2039.8,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "browsing_cart",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0003",
+      "customer_id": "CUST7204",
+      "cart_value": 1923.73,
+      "drop_off_stage": "payment_details",
+      "session_signal": "payment_details",
+      "status": "escalated",
+      "reminders_sent": 1,
+      "discounts_offered": 1,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        },
+        {
+          "action": "offer_discount_code",
+          "result": {
+            "status": "offered_no_response",
+            "percent_off": 10,
+            "code": "COMEBACK10"
+          }
+        },
+        {
+          "action": "escalate_to_human",
+          "result": {
+            "status": "escalated"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0004",
+      "customer_id": "CUST9886",
+      "cart_value": 4213.38,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "browsing_cart",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0005",
+      "customer_id": "CUST2574",
+      "cart_value": 3212.19,
+      "drop_off_stage": "shipping_details",
+      "session_signal": "shipping_details",
+      "status": "resolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "checkout_completed",
+            "channel": "sms"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0006",
+      "customer_id": "CUST9637",
+      "cart_value": 5011.64,
+      "drop_off_stage": "shipping_details",
+      "session_signal": "APP_BACKGROUNDED_MIDFLOW",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0007",
+      "customer_id": "CUST5056",
+      "cart_value": 1890.84,
+      "drop_off_stage": "otp_verification",
+      "session_signal": "COUPON_FIELD_ABANDONED",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 1,
+      "history": [
+        {
+          "action": "offer_discount_code",
+          "result": {
+            "status": "offered_no_response",
+            "percent_off": 10,
+            "code": "SAVE10"
+          }
+        },
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "email"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0008",
+      "customer_id": "CUST9525",
+      "cart_value": 1432.95,
+      "drop_off_stage": "shipping_details",
+      "session_signal": "SESSION_TIMEOUT_STAGE_3",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0009",
+      "customer_id": "CUST6838",
+      "cart_value": 5803.19,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "browsing_cart",
+      "status": "escalated",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        },
+        {
+          "action": "escalate_to_human",
+          "result": {
+            "status": "escalated"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0010",
+      "customer_id": "CUST1028",
+      "cart_value": 3043.33,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "browsing_cart",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0011",
+      "customer_id": "CUST7317",
+      "cart_value": 4530.25,
+      "drop_off_stage": "shipping_details",
+      "session_signal": "COUPON_FIELD_ABANDONED",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 1,
+      "history": [
+        {
+          "action": "offer_discount_code",
+          "result": {
+            "status": "offered_no_response",
+            "percent_off": 10,
+            "code": "SAVE10"
+          },
+          "requires_approval": true
+        },
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "email"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": [
+        {
+          "action": "offer_discount_code",
+          "input": {
+            "code": "SAVE10",
+            "percent_off": 10
+          },
+          "discount_value": 453.03
+        }
+      ]
+    },
+    {
+      "session_id": "CART0012",
+      "customer_id": "CUST7676",
+      "cart_value": 3287.11,
+      "drop_off_stage": "otp_verification",
+      "session_signal": "otp_verification",
+      "status": "resolved",
+      "reminders_sent": 0,
+      "discounts_offered": 1,
+      "history": [
+        {
+          "action": "offer_discount_code",
+          "result": {
+            "status": "checkout_completed",
+            "percent_off": 5,
+            "code": "RETRY5"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0013",
+      "customer_id": "CUST3049",
+      "cart_value": 3509.51,
+      "drop_off_stage": "payment_details",
+      "session_signal": "payment_details",
+      "status": "resolved",
+      "reminders_sent": 0,
+      "discounts_offered": 1,
+      "history": [
+        {
+          "action": "offer_discount_code",
+          "result": {
+            "status": "checkout_completed",
+            "percent_off": 10,
+            "code": "SAVE10NOW"
+          },
+          "requires_approval": true
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": [
+        {
+          "action": "offer_discount_code",
+          "input": {
+            "percent_off": 10,
+            "code": "SAVE10NOW"
+          },
+          "discount_value": 350.95
+        }
+      ]
+    },
+    {
+      "session_id": "CART0014",
+      "customer_id": "CUST3574",
+      "cart_value": 5699.8,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "COUPON_FIELD_ABANDONED",
+      "status": "escalated",
+      "reminders_sent": 0,
+      "discounts_offered": 1,
+      "history": [
+        {
+          "action": "offer_discount_code",
+          "result": {
+            "status": "offered_no_response",
+            "percent_off": 10,
+            "code": "SAVE10"
+          },
+          "requires_approval": true
+        },
+        {
+          "action": "escalate_to_human",
+          "result": {
+            "status": "escalated"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": [
+        {
+          "action": "offer_discount_code",
+          "input": {
+            "percent_off": 10,
+            "code": "SAVE10"
+          },
+          "discount_value": 569.98
+        }
+      ]
+    },
+    {
+      "session_id": "CART0015",
+      "customer_id": "CUST7739",
+      "cart_value": 4342.48,
+      "drop_off_stage": "shipping_details",
+      "session_signal": "SESSION_TIMEOUT_STAGE_3",
+      "status": "unresolved",
+      "reminders_sent": 0,
+      "discounts_offered": 0,
+      "history": [],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0016",
+      "customer_id": "CUST4088",
+      "cart_value": 3583.32,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "browsing_cart",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "email"
+          }
+        },
+        {
+          "action": "mark_unresolved",
+          "result": {
+            "status": "closed_unresolved"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0017",
+      "customer_id": "CUST4763",
+      "cart_value": 706.02,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "browsing_cart",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "email"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0018",
+      "customer_id": "CUST5629",
+      "cart_value": 3024.72,
+      "drop_off_stage": "shipping_details",
+      "session_signal": "shipping_details",
+      "status": "resolved",
+      "reminders_sent": 1,
+      "discounts_offered": 1,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "email"
+          }
+        },
+        {
+          "action": "offer_discount_code",
+          "result": {
+            "status": "checkout_completed",
+            "percent_off": 10,
+            "code": "SHIP10"
+          },
+          "requires_approval": true
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": [
+        {
+          "action": "offer_discount_code",
+          "input": {
+            "code": "SHIP10",
+            "percent_off": 10
+          },
+          "discount_value": 302.47
+        }
+      ]
+    },
+    {
+      "session_id": "CART0019",
+      "customer_id": "CUST6907",
+      "cart_value": 5920.71,
+      "drop_off_stage": "otp_verification",
+      "session_signal": "otp_verification",
+      "status": "unresolved",
+      "reminders_sent": 0,
+      "discounts_offered": 0,
+      "history": [],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0020",
+      "customer_id": "CUST1256",
+      "cart_value": 5039.32,
+      "drop_off_stage": "payment_details",
+      "session_signal": "payment_details",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 1,
+      "history": [
+        {
+          "action": "offer_discount_code",
+          "result": {
+            "status": "offered_no_response",
+            "percent_off": 10,
+            "code": "SAVE10"
+          },
+          "requires_approval": true
+        },
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "email"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": [
+        {
+          "action": "offer_discount_code",
+          "input": {
+            "percent_off": 10,
+            "code": "SAVE10"
+          },
+          "discount_value": 503.93
+        }
+      ]
+    },
+    {
+      "session_id": "CART0021",
+      "customer_id": "CUST3132",
+      "cart_value": 3950.19,
+      "drop_off_stage": "payment_details",
+      "session_signal": "payment_details",
+      "status": "unresolved",
+      "reminders_sent": 0,
+      "discounts_offered": 1,
+      "history": [
+        {
+          "action": "offer_discount_code",
+          "result": {
+            "status": "offered_no_response",
+            "percent_off": 10,
+            "code": "SAVE10"
+          },
+          "requires_approval": true
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": [
+        {
+          "action": "offer_discount_code",
+          "input": {
+            "percent_off": 10,
+            "code": "SAVE10"
+          },
+          "discount_value": 395.02
+        }
+      ]
+    },
+    {
+      "session_id": "CART0022",
+      "customer_id": "CUST6112",
+      "cart_value": 1914.29,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "browsing_cart",
+      "status": "unresolved",
+      "reminders_sent": 0,
+      "discounts_offered": 0,
+      "history": [],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0023",
+      "customer_id": "CUST8118",
+      "cart_value": 5098.01,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "browsing_cart",
+      "status": "escalated",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        },
+        {
+          "action": "escalate_to_human",
+          "result": {
+            "status": "escalated"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0024",
+      "customer_id": "CUST5388",
+      "cart_value": 789.19,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "browsing_cart",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "email"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0025",
+      "customer_id": "CUST7727",
+      "cart_value": 4648.36,
+      "drop_off_stage": "otp_verification",
+      "session_signal": "otp_verification",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0026",
+      "customer_id": "CUST1107",
+      "cart_value": 520.23,
+      "drop_off_stage": "payment_details",
+      "session_signal": "payment_details",
+      "status": "escalated",
+      "reminders_sent": 1,
+      "discounts_offered": 1,
+      "history": [
+        {
+          "action": "offer_discount_code",
+          "result": {
+            "status": "offered_no_response",
+            "percent_off": 10,
+            "code": "SAVE10"
+          }
+        },
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        },
+        {
+          "action": "escalate_to_human",
+          "result": {
+            "status": "escalated"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0027",
+      "customer_id": "CUST3972",
+      "cart_value": 1568.92,
+      "drop_off_stage": "otp_verification",
+      "session_signal": "otp_verification",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        },
+        {
+          "action": "send_retarget_ad",
+          "result": {
+            "status": "queued_no_response",
+            "platform": "meta"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0028",
+      "customer_id": "CUST3753",
+      "cart_value": 4399.85,
+      "drop_off_stage": "payment_details",
+      "session_signal": "payment_details",
+      "status": "resolved",
+      "reminders_sent": 0,
+      "discounts_offered": 1,
+      "history": [
+        {
+          "action": "offer_discount_code",
+          "result": {
+            "status": "checkout_completed",
+            "percent_off": 10,
+            "code": "SAVE10"
+          },
+          "requires_approval": true
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": [
+        {
+          "action": "offer_discount_code",
+          "input": {
+            "percent_off": 10,
+            "code": "SAVE10"
+          },
+          "discount_value": 439.99
+        }
+      ]
+    },
+    {
+      "session_id": "CART0029",
+      "customer_id": "CUST7710",
+      "cart_value": 3473.47,
+      "drop_off_stage": "shipping_details",
+      "session_signal": "shipping_details",
+      "status": "resolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "checkout_completed",
+            "channel": "sms"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0030",
+      "customer_id": "CUST5096",
+      "cart_value": 4486.13,
+      "drop_off_stage": "payment_details",
+      "session_signal": "payment_details",
+      "status": "resolved",
+      "reminders_sent": 0,
+      "discounts_offered": 1,
+      "history": [
+        {
+          "action": "offer_discount_code",
+          "result": {
+            "status": "checkout_completed",
+            "percent_off": 10,
+            "code": "SAVE10"
+          },
+          "requires_approval": true
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": [
+        {
+          "action": "offer_discount_code",
+          "input": {
+            "code": "SAVE10",
+            "percent_off": 10
+          },
+          "discount_value": 448.61
+        }
+      ]
+    },
+    {
+      "session_id": "CART0031",
+      "customer_id": "CUST8981",
+      "cart_value": 4776.37,
+      "drop_off_stage": "shipping_details",
+      "session_signal": "PRICE_SHOCK_SHIPPING_COST",
+      "status": "escalated",
+      "reminders_sent": 1,
+      "discounts_offered": 1,
+      "history": [
+        {
+          "action": "offer_discount_code",
+          "result": {
+            "status": "offered_no_response",
+            "percent_off": 10,
+            "code": "SAVE10"
+          },
+          "requires_approval": true
+        },
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        },
+        {
+          "action": "escalate_to_human",
+          "result": {
+            "status": "escalated"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": [
+        {
+          "action": "offer_discount_code",
+          "input": {
+            "percent_off": 10,
+            "code": "SAVE10"
+          },
+          "discount_value": 477.64
+        }
+      ]
+    },
+    {
+      "session_id": "CART0032",
+      "customer_id": "CUST3918",
+      "cart_value": 3744.97,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "SESSION_TIMEOUT_STAGE_3",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0033",
+      "customer_id": "CUST1438",
+      "cart_value": 2389.23,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "browsing_cart",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        },
+        {
+          "action": "mark_unresolved",
+          "result": {
+            "status": "closed_unresolved"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0034",
+      "customer_id": "CUST5073",
+      "cart_value": 440.81,
+      "drop_off_stage": "otp_verification",
+      "session_signal": "otp_verification",
+      "status": "resolved",
+      "reminders_sent": 1,
+      "discounts_offered": 1,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        },
+        {
+          "action": "offer_discount_code",
+          "result": {
+            "status": "checkout_completed",
+            "percent_off": 10,
+            "code": "OTP10"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0035",
+      "customer_id": "CUST4730",
+      "cart_value": 2521.79,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "browsing_cart",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0036",
+      "customer_id": "CUST5683",
+      "cart_value": 3307.58,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "FORM_VALIDATION_ERROR_UNSPEC",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0037",
+      "customer_id": "CUST7440",
+      "cart_value": 695.74,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "browsing_cart",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "email"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0038",
+      "customer_id": "CUST7898",
+      "cart_value": 3916.13,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "browsing_cart",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0039",
+      "customer_id": "CUST6075",
+      "cart_value": 2234.81,
+      "drop_off_stage": "payment_details",
+      "session_signal": "payment_details",
+      "status": "resolved",
+      "reminders_sent": 0,
+      "discounts_offered": 1,
+      "history": [
+        {
+          "action": "offer_discount_code",
+          "result": {
+            "status": "checkout_completed",
+            "percent_off": 10,
+            "code": "SAVE10"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    },
+    {
+      "session_id": "CART0040",
+      "customer_id": "CUST2699",
+      "cart_value": 1822.68,
+      "drop_off_stage": "browsing_cart",
+      "session_signal": "FORM_VALIDATION_ERROR_UNSPEC",
+      "status": "unresolved",
+      "reminders_sent": 1,
+      "discounts_offered": 0,
+      "history": [
+        {
+          "action": "send_cart_reminder",
+          "result": {
+            "status": "sent_no_response",
+            "channel": "sms"
+          }
+        }
+      ],
+      "guardrail_blocks": [],
+      "approval_flags": []
+    }
+  ]
+}

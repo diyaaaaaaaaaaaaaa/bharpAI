@@ -7,6 +7,7 @@ project just feeds into this loop: observe -> reason -> act ->
 update -> repeat, until a stopping condition fires.
 """
 import json
+import re
 import time
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
 
@@ -23,16 +24,30 @@ from audit_log import log_event
 # Google has renamed/retired the underlying Flash model twice already
 # during this build. The alias always points at their current
 # recommended Flash model, so we stop chasing exact version strings.
-# Confirmed present in your account via list_models.py output.
+#
+# UPDATE (confirmed live, Sept 2026): gemini-2.5-flash-lite is now
+# retired for new users -- the API's own 404 error names its
+# replacement (gemini-3.5-flash-lite), so that's what's pinned below.
+# Also confirmed live: both "-latest" aliases currently resolve to the
+# SAME underlying model (gemini-3.8-flash) for quota purposes, so this
+# 3-entry chain is really only 2 independent free-tier quota pools
+# right now, not 3 -- keeping a pinned, non-"-latest" model as the
+# middle entry is what actually buys a second pool.
 #
 # We also fall back across a small chain of models if the primary one
 # is overloaded (503) or rate-limited (429). Lite models generally get
 # a much higher free-tier daily quota than the newest flagship model,
 # so we lead with one instead of wasting a retry cycle on every single
 # case discovering that gemini-flash-latest is already quota-capped.
+#
+# IMPORTANT: the free tier's daily quota is small (20 requests/day per
+# model, confirmed from a live 429 response) and resets once every 24h,
+# not on a short timer. If you run a large batch (payment + checkout,
+# same day) you WILL exhaust this. Re-running the same batch twice in
+# one day is enough on its own. See README for the practical workaround.
 MODEL_FALLBACK_CHAIN = [
     "gemini-flash-lite-latest",
-    "gemini-2.5-flash-lite",
+    "gemini-3.5-flash-lite",
     "gemini-flash-latest",
 ]
 
@@ -41,6 +56,21 @@ MAX_RETRIES_PER_MODEL = 2    # how many times to retry each model before falling
 CALL_TIMEOUT_SECONDS = 45    # hard ceiling per API call -- see _generate_with_timeout
 
 _executor = ThreadPoolExecutor(max_workers=4)
+
+_RETRY_DELAY_PATTERN = re.compile(r"retry(?:Delay)?[^0-9]{0,15}?(\d+(?:\.\d+)?)s")
+
+
+def _suggested_retry_seconds(error: Exception) -> float | None:
+    """
+    429 responses often tell you exactly how long to wait (see
+    'Please retry in 32.8s' / 'retryDelay': '32s' in a real quota
+    error). If we can find that number, honor it instead of guessing
+    with a fixed schedule -- it's the difference between actually
+    recovering mid-batch and burning two more attempts against a quota
+    that isn't back yet.
+    """
+    match = _RETRY_DELAY_PATTERN.search(str(error))
+    return float(match.group(1)) if match else None
 
 # Convert our provider-agnostic TOOLS list (tools.py) into the objects
 # the Gemini SDK expects. If you ever swap providers, this is the only
@@ -65,44 +95,67 @@ _GENERATE_CONFIG = types.GenerateContentConfig(
 )
 
 
-def _generate_with_timeout(client: genai.Client, model: str, contents):
+def _generate_with_timeout(client: genai.Client, model: str, contents, config: types.GenerateContentConfig = None):
     """
     Runs the API call in a background thread and gives up after
     CALL_TIMEOUT_SECONDS no matter what the SDK is doing internally.
     This is what stops a single hung request from blocking your whole
     batch for an hour, like it did once during this build -- the SDK's
     own internal retry logic can silently stack with ours otherwise.
+
+    `config` defaults to the payment-recovery config (_GENERATE_CONFIG)
+    so existing callers (run_case, below) don't need to change. A
+    second trigger source with its own tools/prompt (see
+    checkout_trigger.py) passes its own config through instead --
+    that's the one parameter that needed to become swappable for this
+    machinery to be reusable across trigger sources.
     """
     future = _executor.submit(
         client.models.generate_content,
         model=model,
         contents=contents,
-        config=_GENERATE_CONFIG,
+        config=config if config is not None else _GENERATE_CONFIG,
     )
     return future.result(timeout=CALL_TIMEOUT_SECONDS)
 
 
-def _call_with_retry(client: genai.Client, contents):
+def _call_with_retry(client: genai.Client, contents, config: types.GenerateContentConfig = None):
     """
     Free-tier models get overloaded (503 'high demand') and rate-limited
     (429) fairly often. This retries each model in MODEL_FALLBACK_CHAIN
     a couple of times with backoff, then moves to the next model before
     giving up entirely -- so a temporary spike on Google's side doesn't
     crash your whole batch run over one unlucky transaction.
+
+    Deliberately reused as-is (imported directly, underscore and all)
+    by checkout_trigger.py: the fallback/timeout/backoff logic here is
+    the fragile infrastructure that took real debugging to get right
+    (see the "what broke" story), and a second trigger source
+    shouldn't have to re-derive it from scratch just because it needs
+    a different tool schema and prompt. If a third trigger source ever
+    needs this too, promote it to a shared llm_client.py rather than
+    importing agent internals a second time.
     """
     last_error = None
     for model in MODEL_FALLBACK_CHAIN:
         for attempt in range(MAX_RETRIES_PER_MODEL):
             try:
-                return _generate_with_timeout(client, model, contents)
+                return _generate_with_timeout(client, model, contents, config)
             except FutureTimeoutError:
                 last_error = TimeoutError(f"{model} did not respond within {CALL_TIMEOUT_SECONDS}s")
                 print(f"[API] {model} timed out after {CALL_TIMEOUT_SECONDS}s; moving on...")
                 break  # don't bother retrying the same model, go straight to fallback
             except Exception as e:
                 last_error = e
-                wait = 8 * (2 ** attempt)  # 8s, 16s per model
-                print(f"[API] {model} failed ({e}); retrying in {wait}s...")
+                suggested = _suggested_retry_seconds(e)
+                # Cap at 40s even if the API suggests longer -- for a
+                # per-day quota error this delay is just Google's
+                # generic backoff hint, not a promise the daily quota
+                # is actually refilled by then. We still want to move
+                # on to the next model/case in reasonable time either way.
+                wait = min(suggested, 40) if suggested is not None else 8 * (2 ** attempt)
+                source = "API-suggested" if suggested is not None else "default"
+                print(f"[API] {model} failed ({e}); retrying in {wait:.0f}s ({source})...")
                 time.sleep(wait)
         print(f"[API] giving up on {model} for now, trying next model in fallback chain...")
     # Every model in the chain failed -- raise so the caller can decide

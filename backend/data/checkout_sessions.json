@@ -1,0 +1,362 @@
+[
+  {
+    "session_id": "CART0001",
+    "customer_id": "CUST4448",
+    "cart_value": 375.69,
+    "drop_off_stage": "otp_verification",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 67,
+    "session_signal": "otp_verification"
+  },
+  {
+    "session_id": "CART0002",
+    "customer_id": "CUST9519",
+    "cart_value": 2039.8,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 46,
+    "session_signal": "browsing_cart"
+  },
+  {
+    "session_id": "CART0003",
+    "customer_id": "CUST7204",
+    "cart_value": 1923.73,
+    "drop_off_stage": "payment_details",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 87,
+    "session_signal": "payment_details"
+  },
+  {
+    "session_id": "CART0004",
+    "customer_id": "CUST9886",
+    "cart_value": 4213.38,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 16,
+    "session_signal": "browsing_cart"
+  },
+  {
+    "session_id": "CART0005",
+    "customer_id": "CUST2574",
+    "cart_value": 3212.19,
+    "drop_off_stage": "shipping_details",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 81,
+    "session_signal": "shipping_details"
+  },
+  {
+    "session_id": "CART0006",
+    "customer_id": "CUST9637",
+    "cart_value": 5011.64,
+    "drop_off_stage": "shipping_details",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 46,
+    "session_signal": "APP_BACKGROUNDED_MIDFLOW"
+  },
+  {
+    "session_id": "CART0007",
+    "customer_id": "CUST5056",
+    "cart_value": 1890.84,
+    "drop_off_stage": "otp_verification",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 145,
+    "session_signal": "COUPON_FIELD_ABANDONED"
+  },
+  {
+    "session_id": "CART0008",
+    "customer_id": "CUST9525",
+    "cart_value": 1432.95,
+    "drop_off_stage": "shipping_details",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 110,
+    "session_signal": "SESSION_TIMEOUT_STAGE_3"
+  },
+  {
+    "session_id": "CART0009",
+    "customer_id": "CUST6838",
+    "cart_value": 5803.19,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 72,
+    "session_signal": "browsing_cart"
+  },
+  {
+    "session_id": "CART0010",
+    "customer_id": "CUST1028",
+    "cart_value": 3043.33,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 143,
+    "session_signal": "browsing_cart"
+  },
+  {
+    "session_id": "CART0011",
+    "customer_id": "CUST7317",
+    "cart_value": 4530.25,
+    "drop_off_stage": "shipping_details",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 109,
+    "session_signal": "COUPON_FIELD_ABANDONED"
+  },
+  {
+    "session_id": "CART0012",
+    "customer_id": "CUST7676",
+    "cart_value": 3287.11,
+    "drop_off_stage": "otp_verification",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 30,
+    "session_signal": "otp_verification"
+  },
+  {
+    "session_id": "CART0013",
+    "customer_id": "CUST3049",
+    "cart_value": 3509.51,
+    "drop_off_stage": "payment_details",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 104,
+    "session_signal": "payment_details"
+  },
+  {
+    "session_id": "CART0014",
+    "customer_id": "CUST3574",
+    "cart_value": 5699.8,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 176,
+    "session_signal": "COUPON_FIELD_ABANDONED"
+  },
+  {
+    "session_id": "CART0015",
+    "customer_id": "CUST7739",
+    "cart_value": 4342.48,
+    "drop_off_stage": "shipping_details",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 126,
+    "session_signal": "SESSION_TIMEOUT_STAGE_3"
+  },
+  {
+    "session_id": "CART0016",
+    "customer_id": "CUST4088",
+    "cart_value": 3583.32,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 5,
+    "session_signal": "browsing_cart"
+  },
+  {
+    "session_id": "CART0017",
+    "customer_id": "CUST4763",
+    "cart_value": 706.02,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 151,
+    "session_signal": "browsing_cart"
+  },
+  {
+    "session_id": "CART0018",
+    "customer_id": "CUST5629",
+    "cart_value": 3024.72,
+    "drop_off_stage": "shipping_details",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 43,
+    "session_signal": "shipping_details"
+  },
+  {
+    "session_id": "CART0019",
+    "customer_id": "CUST6907",
+    "cart_value": 5920.71,
+    "drop_off_stage": "otp_verification",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 169,
+    "session_signal": "otp_verification"
+  },
+  {
+    "session_id": "CART0020",
+    "customer_id": "CUST1256",
+    "cart_value": 5039.32,
+    "drop_off_stage": "payment_details",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 64,
+    "session_signal": "payment_details"
+  },
+  {
+    "session_id": "CART0021",
+    "customer_id": "CUST3132",
+    "cart_value": 3950.19,
+    "drop_off_stage": "payment_details",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 15,
+    "session_signal": "payment_details"
+  },
+  {
+    "session_id": "CART0022",
+    "customer_id": "CUST6112",
+    "cart_value": 1914.29,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 74,
+    "session_signal": "browsing_cart"
+  },
+  {
+    "session_id": "CART0023",
+    "customer_id": "CUST8118",
+    "cart_value": 5098.01,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 52,
+    "session_signal": "browsing_cart"
+  },
+  {
+    "session_id": "CART0024",
+    "customer_id": "CUST5388",
+    "cart_value": 789.19,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 82,
+    "session_signal": "browsing_cart"
+  },
+  {
+    "session_id": "CART0025",
+    "customer_id": "CUST7727",
+    "cart_value": 4648.36,
+    "drop_off_stage": "otp_verification",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 75,
+    "session_signal": "otp_verification"
+  },
+  {
+    "session_id": "CART0026",
+    "customer_id": "CUST1107",
+    "cart_value": 520.23,
+    "drop_off_stage": "payment_details",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 27,
+    "session_signal": "payment_details"
+  },
+  {
+    "session_id": "CART0027",
+    "customer_id": "CUST3972",
+    "cart_value": 1568.92,
+    "drop_off_stage": "otp_verification",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 86,
+    "session_signal": "otp_verification"
+  },
+  {
+    "session_id": "CART0028",
+    "customer_id": "CUST3753",
+    "cart_value": 4399.85,
+    "drop_off_stage": "payment_details",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 36,
+    "session_signal": "payment_details"
+  },
+  {
+    "session_id": "CART0029",
+    "customer_id": "CUST7710",
+    "cart_value": 3473.47,
+    "drop_off_stage": "shipping_details",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 29,
+    "session_signal": "shipping_details"
+  },
+  {
+    "session_id": "CART0030",
+    "customer_id": "CUST5096",
+    "cart_value": 4486.13,
+    "drop_off_stage": "payment_details",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 88,
+    "session_signal": "payment_details"
+  },
+  {
+    "session_id": "CART0031",
+    "customer_id": "CUST8981",
+    "cart_value": 4776.37,
+    "drop_off_stage": "shipping_details",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 179,
+    "session_signal": "PRICE_SHOCK_SHIPPING_COST"
+  },
+  {
+    "session_id": "CART0032",
+    "customer_id": "CUST3918",
+    "cart_value": 3744.97,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 157,
+    "session_signal": "SESSION_TIMEOUT_STAGE_3"
+  },
+  {
+    "session_id": "CART0033",
+    "customer_id": "CUST1438",
+    "cart_value": 2389.23,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 108,
+    "session_signal": "browsing_cart"
+  },
+  {
+    "session_id": "CART0034",
+    "customer_id": "CUST5073",
+    "cart_value": 440.81,
+    "drop_off_stage": "otp_verification",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 104,
+    "session_signal": "otp_verification"
+  },
+  {
+    "session_id": "CART0035",
+    "customer_id": "CUST4730",
+    "cart_value": 2521.79,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 94,
+    "session_signal": "browsing_cart"
+  },
+  {
+    "session_id": "CART0036",
+    "customer_id": "CUST5683",
+    "cart_value": 3307.58,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 17,
+    "session_signal": "FORM_VALIDATION_ERROR_UNSPEC"
+  },
+  {
+    "session_id": "CART0037",
+    "customer_id": "CUST7440",
+    "cart_value": 695.74,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 168,
+    "session_signal": "browsing_cart"
+  },
+  {
+    "session_id": "CART0038",
+    "customer_id": "CUST7898",
+    "cart_value": 3916.13,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 94,
+    "session_signal": "browsing_cart"
+  },
+  {
+    "session_id": "CART0039",
+    "customer_id": "CUST6075",
+    "cart_value": 2234.81,
+    "drop_off_stage": "payment_details",
+    "device_type": "desktop",
+    "minutes_since_dropoff": 124,
+    "session_signal": "payment_details"
+  },
+  {
+    "session_id": "CART0040",
+    "customer_id": "CUST2699",
+    "cart_value": 1822.68,
+    "drop_off_stage": "browsing_cart",
+    "device_type": "mobile",
+    "minutes_since_dropoff": 137,
+    "session_signal": "FORM_VALIDATION_ERROR_UNSPEC"
+  }
+]
