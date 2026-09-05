@@ -22,6 +22,9 @@ export interface ApprovalFlag {
 export interface Case {
   transaction_id: string;
   customer_id: string;
+  customer_name: string;
+  payment_method: string;
+  created_at: string;
   amount: number;
   gateway_response: string;
   status: CaseStatus;

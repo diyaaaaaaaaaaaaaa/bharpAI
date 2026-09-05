@@ -82,6 +82,10 @@ class CheckoutCase:
     history: list = field(default_factory=list)
     guardrail_blocks: list = field(default_factory=list)
     approval_flags: list = field(default_factory=list)
+    # Why the loop actually ended, when it ends without an explicit
+    # escalate_to_human/mark_unresolved call. "" if the case closed
+    # normally via one of those two actions.
+    close_reason: str = ""
 
 
 # --------------------------------------------------------------------
@@ -296,10 +300,23 @@ For each abandoned checkout session:
    often enough for an early-stage drop-off (browsing_cart); a discount
    is better reserved for a customer who got close (payment_details,
    otp_verification) and still didn't convert.
-3. If an action you propose is rejected by the system as not allowed,
+3. IMPORTANT -- every action's outcome is immediate and final within
+   this conversation, not something to wait on. A real reminder or
+   discount might take hours to get a response in production, but in
+   this simulation the tool result already tells you the final outcome
+   right now (e.g. "sent_no_response" means that channel is done and
+   did NOT recover the sale -- it is not "sent, awaiting reply").
+   A session is not resolved just because you sent one thing. If the
+   action you just took did not report status "checkout_completed",
+   you must immediately decide the next step in this same turn: either
+   propose another valid action, or explicitly close the case with
+   escalate_to_human or mark_unresolved. Never end your turn with only
+   reasoning text and no tool call unless you have already closed the
+   case with one of those two actions.
+4. If an action you propose is rejected by the system as not allowed,
    pick a different valid action next -- do not repeat the same
    rejected action.
-4. When no further automated action is likely to help, choose between:
+5. When no further automated action is likely to help, choose between:
    - escalate_to_human: use when the drop-off reason is unclear even
      after diagnosis, OR when two different recovery actions have
      already been tried without success, OR when the cart value is
@@ -309,7 +326,7 @@ For each abandoned checkout session:
    - mark_unresolved: use for lower-value, clearly-diagnosed sessions
      where you've tried what's reasonable and further contact would be
      excessive. Always explain why honestly.
-5. Always briefly explain your reasoning in text before calling a
+6. Always briefly explain your reasoning in text before calling a
    tool, so a human reviewing the audit log can follow your logic.
 """
 
@@ -348,7 +365,7 @@ def run_checkout_case(client: genai.Client, case: CheckoutCase) -> CheckoutCase:
         )
     ]
 
-    for _ in range(MAX_LOOP_ITERATIONS):
+    for iteration in range(MAX_LOOP_ITERATIONS):
         response = _call_with_retry(client, contents, config=_CHECKOUT_GENERATE_CONFIG)
 
         if response.text:
@@ -356,6 +373,13 @@ def run_checkout_case(client: genai.Client, case: CheckoutCase) -> CheckoutCase:
 
         function_calls = response.function_calls or []
         if not function_calls:
+            # The model ended its turn without calling a tool -- distinct
+            # from actually exhausting MAX_LOOP_ITERATIONS. Logging these
+            # separately is what caught the bug where most "unresolved"
+            # cases were mislabeled "max_iterations_reached" after just
+            # one turn; see checkout_trigger.py's module docstring / the
+            # README's "what broke" section for the real story.
+            case.close_reason = "model_ended_turn_without_further_action"
             break
 
         contents.append(response.candidates[0].content)
@@ -414,10 +438,15 @@ def run_checkout_case(client: genai.Client, case: CheckoutCase) -> CheckoutCase:
 
     if case.status == "open":
         case.status = "unresolved"
+        # Honest reason: either the model genuinely used up every turn
+        # without closing (rare, and a real bug if it happens often),
+        # or it ended its turn early without proposing a further tool
+        # call (the actual common case -- see close_reason set above).
+        reason = case.close_reason or "max_iterations_reached"
         log_event(
             session.session_id,
             "case_closed",
-            {"status": "unresolved", "reason": "max_iterations_reached", "trigger": "checkout_dropoff"},
+            {"status": "unresolved", "reason": reason, "trigger": "checkout_dropoff"},
         )
 
     return case
@@ -453,8 +482,10 @@ def _update_checkout_case_state(case: CheckoutCase, action_name: str, result: di
 #    split of clean categories.
 # --------------------------------------------------------------------
 
-COUNT = 40  # deliberately smaller than the payment batch (70) -- this
-            # is the extensibility proof, not a second full track
+COUNT = 15  # kept small for iterative testing to stay well inside the
+            # free-tier daily quota (20 requests/day/model) -- bump
+            # back up for the one real final run once the fix above is
+            # confirmed working.
 
 DROPOFF_STAGES = [
     ("browsing_cart", 35),

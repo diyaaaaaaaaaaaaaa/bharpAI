@@ -194,6 +194,25 @@ function StatusFilters({
   );
 }
 
+const STATUS_DISPLAY: Record<string, { label: string; className: string }> = {
+  resolved: { label: "Recovered", className: "recovered" },
+  escalated: { label: "Manual Review", className: "escalated" },
+  unresolved: { label: "Lost", className: "unresolved" },
+  error: { label: "Error", className: "error" },
+};
+
+function formatTimestamp(iso: string): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleString(undefined, {
+    day: "2-digit",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 function CaseRow({
   caseData,
   selected,
@@ -203,14 +222,30 @@ function CaseRow({
   selected: boolean;
   onClick: () => void;
 }) {
+  const display = STATUS_DISPLAY[caseData.status] ?? { label: caseData.status, className: "" };
   return (
     <div className={`case-row ${selected ? "selected" : ""}`} onClick={onClick}>
       <div className="left">
         <span className={`status-dot ${caseData.status}`} />
-        <span className="id">{caseData.transaction_id}</span>
-        <span className="cause">{caseData.gateway_response}</span>
+        <div className="case-row-main">
+          {caseData.customer_name && (
+            <span className="customer-name">{caseData.customer_name}</span>
+          )}
+          <span className="id">{caseData.transaction_id}</span>
+          <span className="cause">
+            {caseData.payment_method ? `${caseData.payment_method} · ` : ""}
+            {caseData.gateway_response}
+          </span>
+        </div>
       </div>
-      <span className="amount">₹{formatMoney(caseData.amount)}</span>
+      <div className="right">
+        <span className="amount">₹{formatMoney(caseData.amount)}</span>
+        <span className="attempts">{caseData.attempts_made}/3</span>
+        <span className={`status-pill ${display.className}`}>{display.label}</span>
+        {caseData.created_at && (
+          <span className="timestamp">{formatTimestamp(caseData.created_at)}</span>
+        )}
+      </div>
     </div>
   );
 }

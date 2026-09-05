@@ -172,6 +172,9 @@ def main():
             {
                 "transaction_id": r.transaction.transaction_id,
                 "customer_id": r.transaction.customer_id,
+                "customer_name": r.transaction.customer_name,
+                "payment_method": r.transaction.payment_method,
+                "created_at": r.transaction.created_at,
                 "amount": r.transaction.amount,
                 "gateway_response": r.transaction.gateway_response,
                 "status": r.status,

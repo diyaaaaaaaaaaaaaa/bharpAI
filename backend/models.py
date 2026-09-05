@@ -5,7 +5,6 @@ be able to print(case) and read it while you're learning how the
 agent behaves, before you add any real persistence.
 """
 from dataclasses import dataclass, field
-from pydantic import Field
 
 
 @dataclass
@@ -15,6 +14,14 @@ class Transaction:
     amount: float
     gateway_response: str  # e.g. "insufficient_funds", "card_declined",
                             # "network_timeout", "bank_server_error"
+    # Cosmetic/display fields, not used in any diagnosis or policy
+    # logic -- purely so the dashboard case list can show something
+    # closer to a real ops console (customer name, payment method,
+    # when it happened) instead of bare IDs.
+    customer_name: str = ""
+    payment_method: str = ""   # "UPI" | "Debit Card" | "Credit Card" |
+                                # "Netbanking" | "Wallet" | "EMI"
+    created_at: str = ""       # ISO 8601 string
 
 
 @dataclass

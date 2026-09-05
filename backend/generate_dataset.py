@@ -9,8 +9,35 @@ Run with: python generate_dataset.py
 """
 import json
 import random
+from datetime import datetime, timedelta, timezone
 
 COUNT = 70  # PRD target: 60-100 cases -- quality over quantity
+
+# Cosmetic-only pools (never touched by diagnosis or policy logic) so
+# the dashboard case list can show something closer to a real ops
+# console -- a name, a payment method, a timestamp -- instead of bare
+# IDs. Purely for display.
+_FIRST_NAMES = [
+    "Aditya", "Priya", "Rahul", "Sneha", "Vikram", "Neha", "Gaurav",
+    "Kavya", "Rohan", "Ananya", "Karan", "Divya", "Arjun", "Isha",
+    "Nikhil", "Riya", "Varun", "Meera", "Siddharth", "Pooja",
+]
+_LAST_NAMES = [
+    "Sharma", "Iyer", "Nair", "Singh", "Gupta", "Bhatt", "Pillai",
+    "Rao", "Verma", "Chatterjee", "Reddy", "Menon", "Kapoor", "Joshi",
+]
+_PAYMENT_METHODS = ["UPI", "Debit Card", "Credit Card", "Netbanking", "Wallet", "EMI"]
+
+
+def random_customer_name() -> str:
+    return f"{random.choice(_FIRST_NAMES)} {random.choice(_LAST_NAMES)}"
+
+
+def random_created_at() -> str:
+    # Spread across the last ~36 hours so a sorted case list looks like
+    # a live feed rather than everything stamped at the same instant.
+    delta = timedelta(minutes=random.randint(0, 36 * 60))
+    return (datetime.now(timezone.utc) - delta).isoformat()
 
 # Weighted distribution of root causes. Weights don't need to sum to
 # 100 -- random.choices normalizes them. This mix is meant to look
@@ -54,6 +81,9 @@ def generate_batch(count: int):
         batch.append({
             "transaction_id": f"TXN{i:04d}",
             "customer_id": f"CUST{random.randint(1000, 9999)}",
+            "customer_name": random_customer_name(),
+            "payment_method": random.choice(_PAYMENT_METHODS),
+            "created_at": random_created_at(),
             "amount": round(random.uniform(200, 8000), 2),
             "gateway_response": random_gateway_response(cause),
         })
